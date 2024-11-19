@@ -14,19 +14,24 @@ warnings.filterwarnings('ignore')
 st.set_page_config(page_title="Car Recommendation System", page_icon="🚗", layout="wide")
 
 # Set custom background style
+# Set custom background style
 st.markdown(
     """
     <style>
-    .main {
+    body {
         background-image: url('background_img.jpg');
         background-size: cover;
         background-attachment: fixed;
         color: white;
     }
+    .stApp {
+        background: transparent;
+    }
     </style>
     """,
     unsafe_allow_html=True
 )
+
 
 # Load Data
 file_path = 'final_data.csv'
