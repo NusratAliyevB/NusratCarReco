@@ -60,19 +60,36 @@ model.fit(weighted_X)
 joblib.dump(model, 'models/nearest_neighbors_model.pkl')
 
 # Streamlit User Inputs for Car Details
-st.title('Car Recommendation System')
-st.sidebar.header('Car Details')
+st.title('Car Recommendation System 🚗')
+st.sidebar.header('Select Your Preferences')
 
 def get_user_input():
     user_data = {}
     for col in ['State', 'Drivetrain', 'Fuel type', 'Transmission', 'Engine']:
         unique_values = list(label_encoders[col].classes_)
-        user_value = st.sidebar.selectbox(f"Select {col}", options=unique_values, index=0)
+        user_value = st.sidebar.selectbox(
+            f"Select {col}", 
+            options=unique_values, 
+            index=0,
+            help=f"Choose the desired {col.lower()} of the car."
+        )
         user_data[col] = label_encoders[col].transform([user_value])[0]
 
-    user_data['Mileage'] = st.sidebar.number_input("Enter Mileage", min_value=0, value=10000, step=1000)
-    user_data['Year'] = st.sidebar.number_input("Enter Year", min_value=1920, max_value=2025, value=2020, step=1)
-    user_data['Price(USD)'] = st.sidebar.number_input("Enter Price (in USD)", min_value=0, value=20000, step=1000)
+    # Interactive sliders for numerical features
+    user_data['Mileage'] = st.sidebar.slider("Enter Mileage (in miles)", min_value=0, max_value=500000, value=10000, step=1000, help="Adjust mileage to get a car close to your requirement.")
+    user_data['Year'] = st.sidebar.slider("Enter Year", min_value=1920, max_value=2025, value=2020, step=1, help="Adjust the year of the car.")
+    user_data['Price(USD)'] = st.sidebar.slider("Enter Price (in USD)", min_value=0, max_value=200000, value=20000, step=1000, help="Set the maximum price range.")
+
+    # Allow user to rate the importance of each feature
+    st.sidebar.subheader("Rate the importance of each feature:")
+    weights['Fuel type'] = st.sidebar.slider("Fuel Type Weight", 0.0, 1.0, weights['Fuel type'], help="Rate how important the fuel type is.")
+    weights['Engine'] = st.sidebar.slider("Engine Weight", 0.0, 1.0, weights['Engine'], help="Rate how important the engine type is.")
+    weights['Transmission'] = st.sidebar.slider("Transmission Weight", 0.0, 1.0, weights['Transmission'], help="Rate how important the transmission is.")
+    weights['Drivetrain'] = st.sidebar.slider("Drivetrain Weight", 0.0, 1.0, weights['Drivetrain'], help="Rate how important the drivetrain is.")
+    weights['Mileage'] = st.sidebar.slider("Mileage Weight", 0.0, 1.0, weights['Mileage'], help="Rate how important the mileage is.")
+    weights['Year'] = st.sidebar.slider("Year Weight", 0.0, 1.0, weights['Year'], help="Rate how important the car's year is.")
+    weights['Price(USD)'] = st.sidebar.slider("Price Weight", 0.0, 1.0, weights['Price(USD)'], help="Rate how important the car price is.")
+    weights['State'] = st.sidebar.slider("State Weight", 0.0, 1.0, weights['State'], help="Rate how important the car's location is.")
 
     return pd.DataFrame([user_data], columns=user_data.keys())
 
@@ -106,7 +123,7 @@ recommended_cars = recommended_cars.sort_values(by='Similarity', ascending=False
 
 # Check if there are any recommended cars
 if recommended_cars.empty:
-    st.write('No recommendations found within the specified threshold.')
+    st.error('No recommendations found within the specified threshold. Please adjust your preferences and try again.')
 else:
     # Inverse Transform Categorical Columns
     for col in categorical_cols:
@@ -118,10 +135,19 @@ else:
     # Format Year column to display as an integer
     recommended_cars['Year'] = recommended_cars['Year'].apply(lambda x: f"{int(x)}")
 
-    # Display Recommendations
-    st.write('Top 5 Recommended Cars:')
-    st.write(recommended_cars[['Make', 'Model', 'Year', 'Mileage', 'Price(USD)', 'Engine']].reset_index(drop=True))
+    # Display Recommendations with enhanced visuals
+    st.subheader('Top 5 Recommended Cars:')
+    for idx, row in recommended_cars.iterrows():
+        with st.expander(f"{row['Make']} {row['Model']} - ${row['Price(USD)']:,.2f}"):
+            st.write(f"Year: {row['Year']}")
+            st.write(f"Mileage: {int(row['Mileage']):,} miles")
+            st.write(f"Engine: {row['Engine']}")
+            st.write(f"Drivetrain: {row['Drivetrain']}")
+            st.write(f"Transmission: {row['Transmission']}")
+            st.write(f"Fuel Type: {row['Fuel type']}")
+            st.write(f"Similarity Score: {row['Similarity']:.2f}")
 
     # Button to expand all details about recommended cars
     if st.button('Show Full Details'):
         st.write(recommended_cars.reset_index(drop=True))
+
