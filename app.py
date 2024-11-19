@@ -13,26 +13,6 @@ warnings.filterwarnings('ignore')
 # Set page config with a new background and title
 st.set_page_config(page_title="Car Recommendation System", page_icon="🚗", layout="wide")
 
-# Set custom background style
-# Set custom background style
-st.markdown(
-    """
-    <style>
-    main {
-        background-image: url('https://stock.adobe.com/video/car-headlight-on-black-background-concept-of-car-presentation/352616851');
-        background-size: cover;
-        background-attachment: fixed;
-        color: white;
-    }
-    .stApp {
-        background: transparent;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-
 # Load Data
 file_path = 'final_data.csv'
 data = pd.read_csv(file_path)
