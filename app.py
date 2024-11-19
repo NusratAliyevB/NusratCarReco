@@ -18,7 +18,7 @@ st.markdown(
     """
     <style>
     .main {
-        background-image: url('background.jpg');
+        background-image: 'background.jpg';
         background-size: cover;
         background-attachment: fixed;
         color: white;
