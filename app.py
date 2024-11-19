@@ -18,7 +18,7 @@ st.markdown(
     """
     <style>
     .main {
-        background-image: url('https://your-image-link-here.com/background.jpg');
+        background-image: url('https://raw.githubusercontent.com/NusratAliyevB/NusratCarReco/refs/heads/main/background_img.webp');
         background-size: cover;
         background-attachment: fixed;
         color: white;
