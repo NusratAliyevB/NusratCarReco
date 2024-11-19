@@ -151,7 +151,7 @@ else:
     recommended_cars[['Mileage', 'Year', 'Price(USD)']] = scaler.inverse_transform(recommended_cars[['Mileage', 'Year', 'Price(USD)']])
 
     # Format Year column to display as an integer
-    recommended_cars['Year'] = recommended_cars['Year'].apply(lambda x: f"{int(x)}")
+    recommended_cars['Year'] = recommended_cars['Year'].astype(int)
 
     # Display Recommendations with enhanced visuals
     st.subheader('Top 5 Recommended Cars:')
