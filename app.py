@@ -18,7 +18,7 @@ st.set_page_config(page_title="Car Recommendation System", page_icon="🚗", lay
 st.markdown(
     """
     <style>
-    body {
+    main {
         background-image: url('background.jpg');
         background-size: cover;
         background-attachment: fixed;
