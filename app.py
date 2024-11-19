@@ -10,6 +10,24 @@ import warnings
 # Ignore warnings
 warnings.filterwarnings('ignore')
 
+# Set page config with a new background and title
+st.set_page_config(page_title="Car Recommendation System", page_icon="🚗", layout="wide")
+
+# Set custom background style
+st.markdown(
+    """
+    <style>
+    .main {
+        background-image: url('https://your-image-link-here.com/background.jpg');
+        background-size: cover;
+        background-attachment: fixed;
+        color: white;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Load Data
 file_path = 'final_data.csv'
 data = pd.read_csv(file_path)
@@ -150,4 +168,3 @@ else:
     # Button to expand all details about recommended cars
     if st.button('Show Full Details'):
         st.write(recommended_cars.reset_index(drop=True))
-
