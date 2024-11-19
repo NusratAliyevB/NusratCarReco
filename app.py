@@ -19,7 +19,7 @@ st.markdown(
     """
     <style>
     main {
-        background-image: url('background.jpg');
+        background-image: url('https://stock.adobe.com/video/car-headlight-on-black-background-concept-of-car-presentation/352616851');
         background-size: cover;
         background-attachment: fixed;
         color: white;
